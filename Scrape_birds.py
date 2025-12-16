@@ -23,32 +23,47 @@ def scrape_birds():
     
     print("step 2 : looking for birds")
 
+    parent = soup.find_all('doc-resizable-product-card')
+
+
+   
 
     all_links = soup.find_all('doc-resizable-product-card')
     print(f"✓ Found {len(all_links)} total links on the page")
+  
     
     bird_links = []
+    bird_image_urls = []
+
+    for img in parent:
+        bird_image = img.find('doc-image')['src']
+
+        bird_image_urls.append({
+            'image': bird_image
+        })
     
     for link in all_links:
         bird_name = link['title']
         bird_link = link['url']
-       
-       
-       
+        bird_image = bird_image_urls[0]['image'] if bird_image_urls else ""
+
+
         bird_links.append({
             'name': bird_name,
             'link': bird_link,
-            'image_src': "",
-            'alt_text': ""
+            'image': bird_image
         })
+
     
-   
-
-
-    print(bird_links)
 
     return bird_links
 
+scrape_birds()
 
-if __name__ == "__main__":
-    bird_data = scrape_birds()
+
+def save_to_csv(bird_data):
+    df = pd.DataFrame(bird_data)
+    df.to_csv('bird_data.csv', index=False)
+    print("Bird data saved to 'bird_data.csv'")
+
+save_to_csv(scrape_birds())
