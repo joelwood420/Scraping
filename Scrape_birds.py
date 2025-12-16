@@ -16,7 +16,6 @@ def scrape_birds():
     print("Step 1: Fetching the main page...")
     try:
         response = requests.get(url)
-        response.raise_for_status()
         print(f"✓ Page loaded successfully (Status: {response.status_code})")
     except requests.exceptions.RequestException as e:
         print(f"✗ Failed to load page: {e}")
@@ -25,42 +24,32 @@ def scrape_birds():
     soup = BeautifulSoup(response.content, 'html.parser')
     print(f"✓ Page title: {soup.title.string if soup.title else 'No title found'}")
     
-    print("\nStep 2: Looking for <a> tags containing <img> tags")
-    
-   
-    all_links = soup.find_all('a', href=True)
+    print("step 2 : looking for birds")
+
+
+    all_links = soup.find_all('doc-resizable-product-card')
     print(f"✓ Found {len(all_links)} total links on the page")
     
     bird_links = []
     
     for link in all_links:
-        
-        images_in_link = link.find_all('img')
-        
-        if images_in_link:  
-            href = link.get('href')
-            
-            
-            img = images_in_link[0]
-            alt_text = img.get('alt', '').strip()
-            img_src = img.get('src', '')
-            
+        bird_name = link['title']
+        bird_link = link['url']
+       
+       
+       
+        bird_links.append({
+            'name': bird_name,
+            'link': bird_link,
+            'image_src': "",
+            'alt_text': ""
+        })
     
-            if href and href != url and href != '#' and alt_text and len(alt_text) > 2:
-                skip_words = ['logo', 'menu', 'search', 'facebook', 'twitter', 'instagram', 'youtube', 'back to top']
-                if not any(skip_word in alt_text.lower() for skip_word in skip_words):
-                    bird_name = alt_text
-                    full_url = urljoin(url, href)
-                    
-                    bird_links.append({
-                        'name': bird_name,
-                        'link': full_url,
-                        'image_src': img_src,
-                        'alt_text': alt_text
-                    })
-    
-    print(f"\n✓ Found {len(bird_links)} potential bird links with images")
-    
+   
+
+
+    print(bird_links)
+
     if bird_links:
         print("\n ALL BIRDS FOUND:")
         print("=" * 50)
