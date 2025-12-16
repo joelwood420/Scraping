@@ -1,10 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import urllib.request
 import os
-from urllib.parse import urljoin
-import time
 
 def scrape_birds():
 
@@ -50,31 +47,8 @@ def scrape_birds():
 
     print(bird_links)
 
-    if bird_links:
-        print("\n ALL BIRDS FOUND:")
-        print("=" * 50)
-        for i, bird in enumerate(bird_links, 1):
-            print(f"{i:2d}. {bird['name']}")
-            print(f"    Link: {bird['link']}")
-            print(f"    Image: {bird['image_src']}")
-            print()
-    else:
-        print("✗ No bird links found. Let's debug further")
-        
-
-        links_with_images = []
-        for link in all_links:
-            images_in_link = link.find_all('img')
-            if images_in_link:
-                href = link.get('href')
-                alt = images_in_link[0].get('alt', 'No alt text')
-                links_with_images.append((alt, href))
-        
-        print(f"\nDEBUG: Found {len(links_with_images)} links containing images:")
-        for i, (alt, href) in enumerate(links_with_images):
-            print(f"  {i+1:2d}. '{alt}' -> '{href}'")
-    
     return bird_links
+
 
 if __name__ == "__main__":
     bird_data = scrape_birds()
