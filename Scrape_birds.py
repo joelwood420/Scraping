@@ -1,12 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import os
 
 def scrape_birds():
 
-    if not os.path.exists('bird_images'):
-        os.makedirs('bird_images')
     
     url = "https://www.doc.govt.nz/nature/native-animals/birds/birds-a-z/"
     
