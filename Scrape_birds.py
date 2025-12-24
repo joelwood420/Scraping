@@ -58,7 +58,7 @@ def scrape_birds():
 
 def save_to_csv(bird_data):
     df = pd.DataFrame(bird_data)
-    df.to_csv('bird_data.csv', index=False)
+    df.to_csv('bird_data.csv', index=True)
     print("Bird data saved to 'bird_data.csv'")
 
 save_to_csv(scrape_birds())
